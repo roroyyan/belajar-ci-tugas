@@ -45,3 +45,5 @@ $routes->get('contact', 'ContactController::index', ['filter' => 'auth']);
 
 $routes->get('get-location', 'TransaksiController::getLocation', ['filter' => 'auth']);
 $routes->get('get-cost', 'TransaksiController::getCost', ['filter' => 'auth']);
+
+$routes->resource('api', ['controller' => 'apiController']);
