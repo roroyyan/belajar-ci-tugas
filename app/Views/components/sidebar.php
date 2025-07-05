@@ -33,6 +33,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+    <a class="nav-link <?php echo (uri_string() == 'diskon') ? "" : "collapsed" ?>" href="diskon">
+        <i class="bi bi-tags"></i>
+        <span>Diskon</span>
+    </a>
+</li>
+
             <!-- End Produk Nav -->
 
 <li class="nav-item">

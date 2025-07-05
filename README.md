@@ -1,68 +1,145 @@
-# CodeIgniter 4 Application Starter
+# TokoApp – Aplikasi Kasir & Web Service (CodeIgniter 4)
 
-## What is CodeIgniter?
+TokoApp adalah aplikasi berbasis CodeIgniter 4 yang digunakan untuk mengelola produk, kategori, diskon harian, keranjang belanja, transaksi, serta menyediakan API untuk integrasi dashboard monitoring. Aplikasi ini dibangun untuk mendemonstrasikan implementasi backend web development dan konsumsi web service secara praktis.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 1. Fitur
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+### Manajemen Produk
+- Tambah, ubah, hapus produk
+- Upload foto produk
+- Pengelompokan berdasarkan kategori
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+### Manajemen Kategori
+- Tambah, ubah, hapus kategori produk
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### Diskon Harian
+- Admin dapat menambahkan diskon untuk tanggal tertentu
+- Validasi agar tidak bisa menambahkan lebih dari satu diskon di tanggal yang sama
+- Diskon langsung mengurangi harga saat:
+  - Produk dimasukkan ke keranjang
+  - Produk disimpan sebagai detail transaksi
 
-## Installation & updates
+### Role-Based Access
+- Admin memiliki akses penuh ke fitur diskon
+- User hanya dapat melihat dan belanja produk
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### Keranjang Belanja
+- Menambahkan, mengubah, menghapus produk
+- Harga otomatis terpengaruh oleh diskon aktif
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+### Checkout
+- Input alamat dan pencarian kelurahan menggunakan Select2 + API RajaOngkir
+- Memilih layanan ekspedisi dan menghitung ongkir otomatis
+- Menyimpan transaksi ke database
 
-## Setup
+### Web Service (API)
+- Endpoint: `/api`
+- Protected by API key
+- Menyediakan data transaksi beserta detail pembelian
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### Dashboard Monitoring (Frontend terpisah)
+- Mengambil dan menampilkan data dari API
+- Menampilkan jumlah item yang dibeli per transaksi
+- Dilengkapi jam real-time
 
-## Important Change with index.php
+## 2. Instalasi
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### Langkah-langkah
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+1. Clone repositori:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+   ```bash
+   git clone https://github.com/roroyyan/belajar-ci-tugas.git
+   cd belajar-ci-tugas
+   ```
 
-## Repository Management
+2. Install dependency:
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+   ```bash
+   composer install
+   ```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+3. Konfigurasi file `.env`:
 
-## Server Requirements
+   Salin file `env` menjadi `.env` kemudian sesuaikan:
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+   ```
+   app.baseURL = 'http://localhost:8080/'
+   database.default.hostname = localhost
+   database.default.database = db_ci4
+   database.default.username = root
+   database.default.password = 
+   ```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+4. Import database:
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+   - Buka phpMyAdmin
+   - Import file `db_ci4.sql`
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+5. Jalankan aplikasi:
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+   ```bash
+   php spark serve
+   ```
+
+   Akses di: `http://localhost:8080`
+
+6. Menjalankan Dashboard Monitoring:
+
+   - Salin file `dashboard.html` ke dalam folder `public/`
+   - Jalankan aplikasi toko seperti biasa
+   - Akses dashboard: `http://localhost:8080/dashboard.html`
+
+## 3. Struktur Proyek
+
+| Folder/File              | Keterangan                                              |
+|--------------------------|----------------------------------------------------------|
+| `app/Controllers`        | Logic aplikasi (produk, diskon, transaksi, web API)     |
+| `app/Models`             | Query builder untuk interaksi database                  |
+| `app/Views`              | Tampilan HTML (produk, keranjang, diskon, checkout)     |
+| `public/`                | Aset publik: Bootstrap, gambar, dan file dashboard      |
+| `app/Config/Routes.php`  | Routing endpoint aplikasi                               |
+| `.env`                   | Konfigurasi koneksi database dan baseURL                |
+| `README.md`              | Dokumentasi proyek ini                                  |
+
+## 4. Dokumentasi Web Service
+
+- Endpoint: `GET /api`
+- Headers:
+  - `Content-Type: application/x-www-form-urlencoded`
+  - `key: random123678abcghi`
+- Response format:
+
+  ```json
+  {
+    "status": "success",
+    "results": [
+      {
+        "id": 1,
+        "username": "royyan",
+        "alamat": "Jl. Melati",
+        "total_harga": "155000",
+        "ongkir": "10000",
+        "status": 0,
+        "created_at": "2025-07-04 22:45:10",
+        "details": [
+          {
+            "product_id": 2,
+            "jumlah": 1,
+            "diskon": 2000,
+            "subtotal_harga": 49000
+          }
+        ]
+      }
+    ]
+  }
+  ```
+
+## 5. Pengembang
+
+Nama: Royyan Firdaus
+GitHub: [github.com/roroyyan](https://github.com/roroyyan)  
+Repository: [belajar-ci-tugas](https://github.com/roroyyan/belajar-ci-tugas)  
+Framework: CodeIgniter 4  
+Bahasa: PHP 8.1  
+Tugas Uas PWL

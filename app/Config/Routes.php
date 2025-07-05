@@ -12,7 +12,7 @@ $routes->get('login', 'AuthController::login');
 $routes->post('login', 'AuthController::login');
 $routes->get('logout', 'AuthController::logout');
 
-$routes->group('produk', ['filter' => 'auth'], function ($routes) { 
+$routes->group('produk', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'ProdukController::index');
     $routes->post('', 'ProdukController::create');
     $routes->post('edit/(:any)', 'ProdukController::edit/$1');
@@ -20,7 +20,7 @@ $routes->group('produk', ['filter' => 'auth'], function ($routes) {
     $routes->get('download', 'ProdukController::download');
 });
 
-$routes->group('produkkategori', ['filter' => 'auth'], function ($routes) { 
+$routes->group('produkkategori', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'ProdukKategoriController::index');
     $routes->post('', 'ProdukKategoriController::create');
     $routes->post('edit/(:any)', 'ProdukKategoriController::edit/$1');
@@ -45,5 +45,12 @@ $routes->get('contact', 'ContactController::index', ['filter' => 'auth']);
 
 $routes->get('get-location', 'TransaksiController::getLocation', ['filter' => 'auth']);
 $routes->get('get-cost', 'TransaksiController::getCost', ['filter' => 'auth']);
+
+$routes->group('diskon', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'Diskon::index');
+    $routes->post('store', 'Diskon::store');
+    $routes->post('update/(:num)', 'Diskon::update/$1');
+    $routes->get('delete/(:num)', 'Diskon::delete/$1');
+});
 
 $routes->resource('api', ['controller' => 'apiController']);

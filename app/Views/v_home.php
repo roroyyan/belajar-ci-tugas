@@ -1,15 +1,19 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
-<?php
-if (session()->getFlashData('success')) {
-?>
+
+<?php if (session()->getFlashData('success')) : ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <?= session()->getFlashData('success') ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-<?php
-}
-?>
+<?php endif; ?>
+
+<?php if (session()->has('diskon_nominal')) : ?>
+    <div class="alert alert-success text-center mb-3">
+        🎉 Hari ini ada diskon sebesar <?= number_to_currency(session('diskon_nominal'), 'IDR') ?> per item!
+    </div>
+<?php endif; ?>
+
 <!-- Table with stripped rows -->
 <div class="row">
     <?php foreach ($product as $key => $item) : ?>
@@ -33,4 +37,5 @@ if (session()->getFlashData('success')) {
     <?php endforeach ?>
 </div>
 <!-- End Table with stripped rows -->
+
 <?= $this->endSection() ?>
